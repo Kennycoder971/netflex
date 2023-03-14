@@ -1,7 +1,30 @@
-import type { NextPage } from "next";
+import type { NextPage, NextPageContext } from "next";
+import { getSession } from "next-auth/react";
+import BillBoard from "../components/BillBoard";
+import Navbar from "../components/Navbar";
+export async function getServerSideProps(context: NextPageContext) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/auth",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
 
 const Home: NextPage = () => {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  return (
+    <>
+      <Navbar />
+      <BillBoard />
+    </>
+  );
 };
 
 export default Home;
