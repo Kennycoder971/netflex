@@ -1,7 +1,10 @@
 import type { NextPage, NextPageContext } from "next";
 import { getSession } from "next-auth/react";
 import BillBoard from "../components/BillBoard";
+import MovieList from "../components/MovieList";
 import Navbar from "../components/Navbar";
+import useFavorites from "../hooks/useFavorites";
+import useMovieList from "../hooks/useMovieList";
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
   if (!session) {
@@ -19,10 +22,17 @@ export async function getServerSideProps(context: NextPageContext) {
 }
 
 const Home: NextPage = () => {
+  const { data: movies = [] } = useMovieList();
+  const { data: favorites = [] } = useFavorites();
+
   return (
     <>
       <Navbar />
       <BillBoard />
+      <div className="pb-40">
+        <MovieList title="Trending Now" data={movies} />
+        <MovieList title="My List" data={favorites} />
+      </div>
     </>
   );
 };
